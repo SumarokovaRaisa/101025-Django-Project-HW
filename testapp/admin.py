@@ -14,7 +14,7 @@ class SubTaskInline(admin.StackedInline):
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "status", "deadline", "created_at")
+    list_display = ("id", "title", "status", "deadline", "created_at", "short_title" )
     search_fields = ("title",)
     list_filter = ("status",)
     inlines = [SubTaskInline]
