@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from testapp.models import Task, SubTask, Category
+from testapp.models.models import Task, SubTask, Category
 
 
 # Задание 1:
