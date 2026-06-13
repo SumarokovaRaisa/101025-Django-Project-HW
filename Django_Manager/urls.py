@@ -23,5 +23,6 @@ urlpatterns = [
        path('home-page/', greetings),
        path('user/<str:user>', user_greeting),
        path("tasks/", include("testapp.urls")),
+       path("subtasks/", include("testapp.urls")),
 
 ]

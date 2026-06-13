@@ -46,6 +46,7 @@ class SubTask(models.Model):
      title = models.CharField(max_length=30, unique=True)
      description = models.TextField()
      task = models.ForeignKey(Task, on_delete=models.CASCADE)
+     related_name = "subtasks"
      STATUS_CHOICES = (
           ("New", "New"),
           ("In progress", "In progress"),
