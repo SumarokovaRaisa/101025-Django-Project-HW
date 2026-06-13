@@ -1,3 +1,5 @@
+from calendar import weekday
+
 from django.core.serializers import serialize
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -7,6 +9,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
+
+from rest_framework.generics import ListAPIView
 
 from testapp.serializers.tasks import TaskSerializer
 from testapp.models.models import Task
@@ -66,3 +70,16 @@ def create_task(request):
     return Response(serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST)
 
+
+class TaskListByDayView(ListAPIView):
+    serializer_class = TaskSerializer
+
+
+    def get_queryset(self):
+        queryset = Task.objects.all()
+        weekday = self.request.query_params.get("weekday")
+
+        if weekday:
+            queryset = queryset.filter(created_at__weekday=weekday)
+
+        return queryset

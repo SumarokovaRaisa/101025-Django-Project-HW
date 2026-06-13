@@ -1,8 +1,9 @@
-from django.core.serializers import serialize
+from django.shortcuts import get_object_or_404
+from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.shortcuts import get_object_or_404
+from rest_framework.pagination import PageNumberPagination
 
 from testapp.models.models import SubTask
 from testapp.serializers.subtask import SubTaskSerializer
@@ -61,3 +62,35 @@ class SubTaskDetailUpdateDeleteView(APIView):
         return Response(
             status=status.HTTP_204_NO_CONTENT
         )
+
+
+class SubTaskPagination(PageNumberPagination):
+    page_size = 5
+
+
+class SubTaskListView(ListAPIView):
+    queryset = SubTask.objects.all().order_by("-created_at")
+    serializer_class = SubTaskSerializer
+    pagination_class = SubTaskPagination
+
+
+class SubTaskFilterListView(ListAPIView):
+    serializer_class = SubTaskSerializer
+    pagination_class = SubTaskPagination
+
+    def get_queryset(self):
+        queryset = SubTask.objects.all()
+
+        main_task = self.request.query_params.get("main_task")
+        status = self.request.query_params.get("status")
+
+
+        if main_task:
+            queryset = queryset.filter(task__title__icontains=main_task)
+
+        if status:
+            queryset = queryset.filter(status=status)
+
+
+        return queryset.order_by("-created_at")
+

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from testapp.models.models import SubTask, Category
+from testapp.models.models import SubTask
 
 
 class SubTaskCreateSerializer(serializers.ModelSerializer):
