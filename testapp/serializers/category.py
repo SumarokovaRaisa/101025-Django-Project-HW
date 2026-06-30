@@ -28,3 +28,9 @@ class CategoryCreateSerializer(serializers.ModelSerializer):
             )
 
         return super().update(instance, validated_data)
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id", "name"]

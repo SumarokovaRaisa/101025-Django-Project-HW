@@ -1,7 +1,20 @@
 from django.db import models
+from django.utils import timezone
+
+class NonDeletedCategoryManager(models.Manager):
+
+     def get_queryset(self):
+          return super().get_queryset().filter(is_deleted=False)
 
 class Category(models.Model):
-     name = models.CharField(max_length=50, unique=True)
+     name = models.CharField(max_length=50, unique=True, verbose_name="Category")
+
+     is_deleted = models.BooleanField(default=False, verbose_name="Deleted")
+     deleted_at = models.DateTimeField(null=True, blank=True, verbose_name="Date of deletion")
+
+     objects = NonDeletedCategoryManager()
+     all_objects = models.Manager()
+
 
      def __str__(self):
           return self.name
@@ -11,8 +24,13 @@ class Category(models.Model):
           db_table = "task_manager_category"
           verbose_name = "Category"
 
+     def delete(self, *args, **kwargs):
+          self.is_deleted = True
+          self.deleted_at = timezone.now()
+          self.save()
 
-# Create your models here.
+
+
 class Task(models.Model):
      title = models.CharField(max_length=30, unique=True)
      description = models.TextField()
