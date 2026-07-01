@@ -9,6 +9,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    ordering = ["id"]
 
     @action(detail=True, methods=['get'], url_path='count-tasks')
     def count_tasks(self, request, pk=None):

@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
-import rest_framework.pagination
+
+import rest_framework.permissions
 from environ import Env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -48,9 +49,25 @@ INSTALLED_APPS = [
     'django_filters',
 ]
 
+from datetime import timedelta
+
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.CustomCursorPagination',
-    'PAGE_SIZE' : 6
+    'DEFAULT_AUTHENTICATION_CLASSES' : ('rest_framework_simplejwt.authentication.JWTAuthentication', ),
+
+    'DEFAULT_PERMISSION_CLASSES' : ['rest_framework.permissions.IsAuthenticated'],
+
+    'DEFAULT_PAGINATION_CLASS' : 'pagination.CustomCursorPagination',
+    'PAGE_SIZE' : 5,
+    'ORDERING' : '-id',
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME' : timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME' : timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS' : False,
+    'BLACKLIST_OPERATIONS' : False,
+    'ALGORITHM' : 'HS256',
+    'AUTH_HEADER_TYPES' : ('Bearer',),
 }
 
 MIDDLEWARE = [
